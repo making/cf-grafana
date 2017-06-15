@@ -40,3 +40,5 @@ cf push my-prom -b binary_buildpack -c './prometheus -web.listen-address=:8080' 
 ```
 
 Go to https://my-prom.cfapps.io
+
+This instance uses local storage, so all metrics will be reset when it is restarted.
