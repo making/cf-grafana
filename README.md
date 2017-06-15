@@ -39,3 +39,4 @@ sed -i -e 's|localhost:9090|localhost:8080|' prometheus.yml
 cf push my-prom -b binary_buildpack -c './prometheus -web.listen-address=:8080' -m 64m
 ```
 
+Go to https://my-prom.cfapps.io
