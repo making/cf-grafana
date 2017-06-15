@@ -1,0 +1,7 @@
+applications:
+- name: cfgrafana
+  buildpack: binary_buildpack
+  memory: 64m
+  command: './run.sh'
+  services:
+  - grafana-db # cf cs cleardb spark grafana-db
