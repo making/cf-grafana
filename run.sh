@@ -12,7 +12,6 @@ fi
 
 echo "Detected $SERVICE"
 
-MYSQL_URI=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.uri'`
 # MYSQL_HOSTNAME=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.hostname'`
 # MYSQL_PASSWORD=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.password'`
 # MYSQL_PORT=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.port'`
@@ -23,7 +22,7 @@ MYSQL_URI=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.uri'`
 
 cd $GRAFANA_DIR
 export GF_DATABASE_TYPE=mysql
-export GF_DATABASE_URL=$MYSQL_URI
+export GF_DATABASE_URL=${DATABASE_URL/mysql2/mysql} # replace "mysql2://..." which Grafana doesn't understand in $DATABASE_URL with "mysql://..."
 # sed -i -e 's|max_idle_conn =|max_idle_conn = 1|' ./conf/defaults.ini
 # sed -i -e 's|max_open_conn =|max_open_conn = 3|' ./conf/defaults.ini
 # sed -i -e 's|provider = file|provider = mysql|' ./conf/defaults.ini
