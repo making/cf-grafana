@@ -7,9 +7,9 @@
 ```
 git clone https://github.com/making/cf-grafana.git
 cd cf-grafana
-wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-4.3.2.linux-x64.tar.gz 
-tar -zxvf grafana-4.3.2.linux-x64.tar.gz 
-mv grafana-4.3.2 grafana
+wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-5.3.2.linux-amd64.tar.gz 
+tar -zxvf grafana-5.3.2.linux-amd64.tar.gz 
+mv grafana-5.3.2.linux-amd64
 # In case of Pivotal Web Services
 cf create-service cleardb spark grafana-db
 # In case of Pivotal Cloud Foundry
@@ -24,7 +24,6 @@ Go to https://my-grafana.cfapps.io
 > If you don't need to persist dashboards and users, you can use default sqlite3 as follows. This is much better experience than free ClearDB though everything in the instance will disappear when you restart the application.
 >
 > ```
-> sed -i -e 's|^http_port = 3000$|http_port = 8080|' ./conf/defaults.ini
 > cf push my-grafana -b binary_buildpack -c './bin/grafana-server web' -m 64m
 > ```
 
