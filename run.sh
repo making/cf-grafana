@@ -22,6 +22,8 @@ echo "Detected $SERVICE"
 
 cd $GRAFANA_DIR
 export GF_DATABASE_TYPE=mysql
+# drop ?reconnect=true from connection string because Grafana doesn't handle it properly
+DATABASE_URL=${DATABASE_URL/?reconnect=true}
 export GF_DATABASE_URL=${DATABASE_URL/mysql2/mysql} # replace "mysql2://..." which Grafana doesn't understand in $DATABASE_URL with "mysql://..."
 # sed -i -e 's|max_idle_conn =|max_idle_conn = 1|' ./conf/defaults.ini
 # sed -i -e 's|max_open_conn =|max_open_conn = 3|' ./conf/defaults.ini
