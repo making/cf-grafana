@@ -12,20 +12,19 @@ fi
 
 echo "Detected $SERVICE"
 
-MYSQL_URI=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.uri'`
-MYSQL_HOSTNAME=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.hostname'`
-MYSQL_PASSWORD=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.password'`
-MYSQL_PORT=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.port'`
-MYSQL_USERNAME=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.username'`
-MYSQL_DATABASE=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.name'`
+# MYSQL_HOSTNAME=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.hostname'`
+# MYSQL_PASSWORD=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.password'`
+# MYSQL_PORT=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.port'`
+# MYSQL_USERNAME=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.username'`
+# MYSQL_DATABASE=`echo $VCAP_SERVICES | jq -r '.["'$SERVICE'"][0].credentials.name'`
 
-SESSION_CONFIG="$MYSQL_USERNAME:$MYSQL_PASSWORD@tcp($MYSQL_HOSTNAME:$MYSQL_PORT)/$MYSQL_DATABASE"
+# SESSION_CONFIG="$MYSQL_USERNAME:$MYSQL_PASSWORD@tcp($MYSQL_HOSTNAME:$MYSQL_PORT)/$MYSQL_DATABASE"
 
 cd $GRAFANA_DIR
-sed -i -e 's|^url =$|url = '$MYSQL_URI'|' ./conf/defaults.ini
-sed -i -e 's|^type = sqlite3$|type = mysql|' ./conf/defaults.ini
-sed -i -e 's|^http_port = 3000$|http_port = 8080|' ./conf/defaults.ini
-sed -i -e 's|mode = console file|mode = console|' ./conf/defaults.ini
+export GF_DATABASE_TYPE=mysql
+# drop ?reconnect=true from connection string because Grafana doesn't handle it properly
+DATABASE_URL=${DATABASE_URL/?reconnect=true}
+export GF_DATABASE_URL=${DATABASE_URL/mysql2/mysql} # replace "mysql2://..." which Grafana doesn't understand in $DATABASE_URL with "mysql://..."
 # sed -i -e 's|max_idle_conn =|max_idle_conn = 1|' ./conf/defaults.ini
 # sed -i -e 's|max_open_conn =|max_open_conn = 3|' ./conf/defaults.ini
 # sed -i -e 's|provider = file|provider = mysql|' ./conf/defaults.ini
